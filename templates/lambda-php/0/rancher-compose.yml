@@ -1,0 +1,101 @@
+.catalog:
+  name: "php5"
+  version: "v0.1"
+  description: "PHP5 runtime for Lambda"
+  minimum_rancher_version: "v1.0.1"
+  questions:
+    - variable: webroot_volume_name
+      description: "Webroot shared volume name"
+      label: "e.g volume_name"
+      required: true
+      type: "string"
+    - variable: webroot
+      description: "Change the default webroot directory from '/var/www/html' to your own setting"
+      label: "e.g /var/www/html"
+      default: "/var/www/html"
+      required: true
+      type: "string"
+    - variable: git_repo
+      description: "URL to the repository containing your source code. If you are using a personal token, this is the https URL without https://, e.g github.com/project/ for ssh prepend with git@ e.g git@github.com:project.git"
+      label: "e.g git@github.com:project.git"
+      required: false
+      type: "string"
+    - variable: git_branch
+      description: "Select a specific branch (optional)"
+      required: false
+      type: "string"
+    - variable: git_email
+      description: "Set your email for code pushing (required for git to work)"
+      required: false
+      type: "string"
+    - variable: git_name
+      description: "Set your name for code pushing (required for git to work)"
+      required: false
+      type: "string"
+    - variable: ssh_key
+      description: "Private SSH deploy key for your repository base64 encoded (requires write permissions for pushing)"
+      required: false
+      type: "string"
+    - variable: git_personal_token
+      description: "Personal access token for your git account (required for HTTPS git access)"
+      required: false
+      type: "string"
+    - variable: git_username
+      description: "Git username for use with personal tokens. (required for HTTPS git access)"
+      required: false
+      type: "string"
+    - variable: errors
+      description: "Set to 1 to display PHP Errors in the browser"
+      default: "1"
+      required: true
+      type: "enum"
+      options:
+        - "0"
+        - "1"
+    - variable: hide_nginx_headers
+      description: "Disable by setting to 0, default behaviour is to hide nginx + php version in headers"
+      default: 0
+      required: true
+      type: "enum"
+      options:
+        - "0"
+        - "1"
+    - variable: php_mem_limit
+      description: "Set higher PHP memory limit, default is 128M"
+      default: "128M"
+      required: true
+      type: "enum"
+      options:
+        - "64M"
+        - "128M"
+        - "256M"
+    - variable: php_post_max_size
+      description: "Set a larger post_max_size, default is 100M"
+      default: "100M"
+      required: true
+      type: "enum"
+      options:
+        - "2M"
+        - "10M"
+        - "100M"
+        - "200M"
+    - variable: php_upload_max_filesize
+      description: "Set a larger upload_max_filesize, default is 100M"
+      default: "100M"
+      required: true
+      type: "enum"
+      options:
+        - "2M"
+        - "10M"
+        - "100M"
+        - "200M"
+    - variable: run_scripts
+      description: "Set to 1 to execute scripts"
+      default: "1"
+      required: true
+      type: "enum"
+      options:
+        - "0"
+        - "1"
+runtime:
+  scale: 1
