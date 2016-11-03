@@ -20,7 +20,6 @@ runtime:
     RUN_SCRIPTS: ${run_scripts}
   volumes:
     - ${webroot_volume_name}:${webroot}
-  cpuset: '1'
-  cpu_shares: 512
+  cpu_shares: 8
   mem_limit: 268435456
   volume_driver: convoy-nfs
