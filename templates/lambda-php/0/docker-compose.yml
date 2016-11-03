@@ -3,6 +3,7 @@ runtime:
     - 80/tcp
   labels:
     io.rancher.container.pull_image: always
+    io.rancher.container.network: true
   image: 192.168.0.86:5000/richarvey/nginx-php-fpm:php5
   environment:
     GIT_REPO: ${git_repo}
