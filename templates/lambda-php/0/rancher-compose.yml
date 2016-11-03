@@ -51,7 +51,7 @@
       required: false
       type: "string"
     - variable: errors
-      label: "Errirs Settings"
+      label: "Errors Settings"
       description: "Set to 1 to display PHP Errors in the browser"
       default: "1"
       required: true
@@ -111,3 +111,11 @@
         - "1"
 runtime:
   scale: 1
+  health_check:
+    port: 80
+    interval: 2000
+    initializing_timeout: 60000
+    unhealthy_threshold: 3
+    strategy: recreate
+    healthy_threshold: 2
+    response_timeout: 2000
