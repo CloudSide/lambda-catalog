@@ -1,0 +1,61 @@
+.catalog:
+  name: "MySQL To REST"
+  version: "v0.1"
+  description: "为您的MySQL数据库自动生成RESTful API"
+  minimum_rancher_version: "v1.0.1"
+  questions:
+    - variable: db_host
+      description: "例如: 192.168.100.123"
+      label: "MySQL数据库IP地址"
+      required: true
+      type: "string"
+    - variable: db_port
+      label: "MySQL数据库端口"
+      description: "默认: 3306"
+      default: "3306"
+      required: true
+      type: "string"
+    - variable: db_user
+      label: "MySQL数据库用户名"
+      description: "默认: root"
+      default: "root"
+      required: true
+      type: "string"
+    - variable: db_pass
+      label: "MySQL数据库密码"
+      required: true
+      type: "password"
+    - variable: db_database
+      label: "数据库名称"
+      description: "填写要生成API的数据库名称"
+      required: true
+      type: "string"
+    - variable: public_port
+      label: "API服务开放端口"
+      default: 3000
+      required: true
+      type: "int"
+rest-service:
+  scale: 1
+  health_check:
+    port: ${public_port}
+    interval: 2000
+    initializing_timeout: 60000
+    unhealthy_threshold: 3
+    strategy: recreate
+    healthy_threshold: 2
+    response_timeout: 2000
+
+mysql-broker:
+  external_ips:
+    - ${db_host}
+  start_on_create: true
+  health_check:
+    response_timeout: 2000
+    healthy_threshold: 2
+    port: ${db_port}
+    unhealthy_threshold: 3
+    initializing_timeout: 60000
+    interval: 2000
+    strategy: recreate
+    reinitializing_timeout: 60000

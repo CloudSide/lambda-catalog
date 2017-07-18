@@ -1,0 +1,20 @@
+rest-service:
+  labels:
+    io.rancher.container.pull_image: always
+    io.rancher.container.network: true
+  image: cloudmario/mysql-to-rest
+  environment:
+    DB_HOST: "mysql"
+    DB_PORT: "${db_port}"
+    DB_USER: "${db_user}"
+    DB_PASS: "${db_pass}"
+    DB_DATABASE: "${db_database}"
+  ports:
+    - ${public_port}:3000/tcp
+  external_links:
+    - mysql-broker:mysql
+  cpu_shares: 8
+  mem_limit: 268435456
+
+mysql-broker:
+  image: rancher/external-service
