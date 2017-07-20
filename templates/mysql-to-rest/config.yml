@@ -3,6 +3,6 @@ description: |
   为您的MySQL数据库自动生成RESTful API
 version: v0.2
 category: Connector
-maintainer: 白山云 <support@baishancloud.com>
+maintainer: 白山云 - 云聚合
 # license: Apache License Version 2.0
-projectURL: http://baishancloud.com/
+projectURL: http://juhe.baishancloud.com/
