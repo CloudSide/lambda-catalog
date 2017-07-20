@@ -1,45 +1,16 @@
-# mysql-to-rest
+# MySQL To REST
 
-mysql-to-rest is a module to map a MySQL-DB to an REST API.
-
-The foundation for this module is the express framework, as well as the mysql package for the DB connection.
+为您的MySQL数据库自动生成RESTful API
 
 ## API
 
-### Installation
+#### 获取某张表的记录
 
-`$ npm install mysql-to-rest`
-
-First load express and mysql
-
-```js
-var express = require('express');
-var mysql = require('mysql');
-var mysqltorest  = require('mysql-to-rest');
-var app = express();
-```
-
-Then open your DB connection. Find more [here](https://github.com/felixge/node-mysql/#introduction). (You can also use `mysql.createPool()` to create a pool of connections and pass that to `mysql-to-rest`.)
-
-When all dependencies are up and ready, init the API like this:
-
-```js
-var api = mysqltorest(app,connection);
-//Dont forget to start the server
-app.listen(8000);
-```
-
-### Usage
-
-Once the app is up and running you have the following options:
-
-#### GET Table
-
-##### Request
+##### 请求
 
 `GET /api/:table`
 
-##### Result
+##### 响应
 
 ```json
 {
@@ -57,86 +28,72 @@ Once the app is up and running you have the following options:
 }
 ```
 
-##### Params
-
-You can further specify your Requests with GET params. As an example:
+##### 参数
 
 `GET /api/:table?_limit=0,10&_order[id]=DESC&id[GREAT]=4`
 
-##### General params
+##### 功能参数
 
-**Important: The general params are noted with the prefix you can define in the options. Default is underscore. Eg: \_limit**
+**MySQL的关键字加下划线前缀，例如: \_limit**¸
 
-All general params are as close to the MYSQL feeling as it would make sense in a web API. So it really helps if you understand MYSQL Syntax.
 
-* `limit=` Takes either one or two comma separated integers. Acts like specified [here](https://dev.mysql.com/doc/refman/5.0/en/select.html)
-* `order[column]=` Takes either ASC or DESC. Orders the result ASC|DESC according to the column. Acts like specified [here](https://dev.mysql.com/doc/refman/5.0/en/select.html)
-* `fields=` Takes one or more comma separated columns as an argument. Filters the results to only show the specified columns. Acts like specified [here](https://dev.mysql.com/doc/refman/5.0/en/select.html)
+* `limit=` [mysql文档](https://dev.mysql.com/doc/refman/5.0/en/select.html)
+* `order[column]=` 排序参数，例如：`order[age]=ASC`，`order[time]=DESC` [mysql文档](https://dev.mysql.com/doc/refman/5.0/en/select.html)
+* `fields=` 将一个或多个逗号分隔的字段作为参数，过滤结果只显示指定的字段，例如：`fields=id,name` [mysql文档](https://dev.mysql.com/doc/refman/5.0/en/select.html)
 
-##### Field specific params
+##### 字段名作为参数
 
-Here you can apply further conditions to your selection.
+将字段作为参数，以便实现查询条件
 
-Syntax: `column=value` or `column[operator]=value`
+语法: `column=value` or `column[operator]=value`
 
-The first option is simple and can be used to select entries where the column equals (=) the provided value.
+例如：
 
-In the second option one can specify exactly the operator which should be used. Full list:
+`sex=male&age=20`：查询sex为male，age为20的所有记录
+`age[GREAT]=20`：查询age大于20的所有记录
 
-* `GREAT` results in \>
-* `SMALL` results in \<
-* `EQGREAT`results in \>=
-* `EQSMALL`results in \<=
-* `LIKE`results in LIKE
-* `EQ`results in =
+操作符列表:
+
+* `GREAT` : \>
+* `SMALL` : \<
+* `EQGREAT` : \>=
+* `EQSMALL` : \<=
+* `LIKE` : LIKE
+* `EQ` : =
 
 ---
 
-#### GET Row
+#### 获取一行
 
-##### Request
+##### 请求
 
 `GET /api/:table/:id`
 
-##### Result
-
-For results and params see at [`GET /api/:table`](#get-table)
-
 ---
 
-#### POST
+#### 插入记录
 
-##### Request
+##### 请求
 
 `POST /api/:table`
 
-##### Result
-
-This will return the created row like at [`GET /api/:table`](#get-table)
-
 ---
 
-#### PUT
+#### 更新记录
 
-##### Request
+##### 请求
 
 `PUT /api/:table/:id`
 
-##### Result
-
-This will return the updated row like at [`GET /api/:table`](#get-table)
-
 ---
 
-#### DELETE
+#### 删除记录
 
-##### Request
+##### 请求
 
 `DELETE /api/:table/:id`
 
-##### Result
-
-This will return the deleted id. Whereby the id is the first primary key of the table. Example:
+##### 响应
 
 ```json
 {
@@ -147,81 +104,3 @@ This will return the deleted id. Whereby the id is the first primary key of the 
     "table": "test"
 }
 ```
-
-## Config
-
-This line inits the api. You can provide a config object to adjust the settings to your need by adding an options object:
-
-`mysqltorest(app,connection,options);`
-
-If not specified, the following options will be used:
-
-```js
-var default_options = {
-    uploadDestination:__dirname + '/uploads',
-    allowOrigin:'*',
-    maxFileSize:-1,
-    apiURL:'/api',
-    paramPrefix:'_'
-};
-```
-
-
-The options consist of the following:
-
-### Options
-
-#### uploadDestination
-
-This specifies the multer upload destination. The default is ` __dirname + '/uploads'`. For more read the [multer documentation](https://github.com/expressjs/multer).
-
-#### allowOrigin
-
-As the API sets some default headers this sets the Access-Control-Allow-Origin header. Provide the domain or url the API should be accessed by. Default is `*` so be careful!
-
-#### maxFileSize
-
-This checks the filesize of the uploaded files. The value is in bytes. Default (and off) is `-1`.
-
-#### apiURL
-
-Here the url to the api is specified. Default is `/api`.
-
-#### paramPrefix
-
-This is the query prefix for not select querys like order or limit.
-
-### Functions
-
-Currently there is only one API call:
-
-`api.setAuth(function)`
-
-#### function
-
-Provide an express middleware to authenticate the requests to the api specifically. The following example shows the basic idea:
-
-```js
-api.setAuth(function(req,res,next) {
-    if(req.isAuthenticated && req.method === 'GET'){
-        next();
-    } else {
-        //Handle unauthorized access
-    }
-});
-```
-
-
-## MySQL Config
-
-To make the setup as easy as possible mysql-to-rest reads almost all config directly form the database. This has two "pitfalls":
-
-* `NOT NULL` Columns are seen as required. Even if they have a default value.
-* If you want to upload a file. You have to do the following steps:
-    * Create a varchar or text column.
-    * Set the default value to `FILE`.
-
-## Docker
-
-A full version can be deployed using docker. (Thanks to @reduardo7)
-https://hub.docker.com/r/reduardo7/db-to-api/

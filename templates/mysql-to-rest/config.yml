@@ -1,7 +1,7 @@
 name: MySQL To REST
 description: |
   为您的MySQL数据库自动生成RESTful API
-version: v0.1
+version: v0.2
 category: Connector
 maintainer: CloudMario <smcz@qq.com>
 license: Apache License Version 2.0

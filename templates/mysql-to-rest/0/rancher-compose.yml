@@ -1,6 +1,6 @@
 .catalog:
   name: "MySQL To REST"
-  version: "v0.1"
+  version: "v0.2"
   description: "为您的MySQL数据库自动生成RESTful API"
   minimum_rancher_version: "v1.0.1"
   questions:
@@ -24,7 +24,7 @@
     - variable: db_pass
       label: "MySQL数据库密码"
       required: true
-      type: "password"
+      type: "string"
     - variable: db_database
       label: "数据库名称"
       description: "填写要生成API的数据库名称"
@@ -37,14 +37,6 @@
       type: "int"
 rest-service:
   scale: 1
-  health_check:
-    port: ${public_port}
-    interval: 2000
-    initializing_timeout: 60000
-    unhealthy_threshold: 3
-    strategy: recreate
-    healthy_threshold: 2
-    response_timeout: 2000
 
 mysql-broker:
   external_ips:
