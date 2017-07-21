@@ -1,8 +1,0 @@
-name: PHP For Lambda
-description: |
-  # PHP runtime for Lambda
-version: v0.1
-category: Lambda
-maintainer: CloudMario <smcz@qq.com>
-license: Apache License Version 2.0
-projectURL: https://github.com/CloudSide
