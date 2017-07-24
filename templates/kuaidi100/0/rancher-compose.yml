@@ -1,14 +1,13 @@
 .catalog:
-  name: "MySQL To REST"
-  version: "v0.2"
-  description: "为您的MySQL数据库自动生成RESTful API"
+  name: "快递信息同步服务"
+  version: "v0.1"
+  description: "将快递的进度信息同步到您的MySQL数据库"
   minimum_rancher_version: "v1.0.1"
   questions:
-    - variable: db_host
-      description: "例如: 192.168.100.123"
-      label: "MySQL数据库IP地址"
+    - variable: mysql_link
+      label: "选择MySQL代理服务"
       required: true
-      type: "string"
+      type: "service"
     - variable: db_port
       label: "MySQL数据库端口"
       description: "默认: 3306"
@@ -30,24 +29,9 @@
       description: "填写要生成API的数据库名称"
       required: true
       type: "string"
-    - variable: public_port
-      label: "API服务开放端口"
-      default: 13000
+    - variable: post_ids
+      label: "要同步的单号，多个单号之间用逗号','隔开"
       required: true
-      type: "int"
-rest-service:
+      type: "string"
+sync-service:
   scale: 1
-
-mysql-broker:
-  external_ips:
-    - ${db_host}
-  start_on_create: true
-  health_check:
-    response_timeout: 2000
-    healthy_threshold: 2
-    port: ${db_port}
-    unhealthy_threshold: 3
-    initializing_timeout: 60000
-    interval: 2000
-    strategy: recreate
-    reinitializing_timeout: 60000

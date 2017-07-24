@@ -1,0 +1,16 @@
+sync-service:
+  labels:
+    io.rancher.container.pull_image: always
+    io.rancher.container.network: true
+  image: cloudmario/kuaidi100
+  environment:
+    DB_HOST: "mysql"
+    DB_PORT: "${db_port}"
+    DB_USER: "${db_user}"
+    DB_PASS: "${db_pass}"
+    DB_DATABASE: "${db_database}"
+    POST_IDS: "${post_ids}"
+  external_links:
+    - ${mysql_link}:mysql
+  cpu_shares: 8
+  mem_limit: 268435456

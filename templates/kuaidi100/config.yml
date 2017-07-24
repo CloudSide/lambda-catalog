@@ -1,0 +1,8 @@
+name: 快递信息同步服务
+description: |
+  将快递的进度信息同步到您的MySQL数据库
+version: v0.1
+category: Connector
+maintainer: 白山云 - 云聚合
+# license: Apache License Version 2.0
+projectURL: http://juhe.baishancloud.com/
